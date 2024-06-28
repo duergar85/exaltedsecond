@@ -67,6 +67,8 @@ export class ExaltedSecondItemSheet extends ItemSheet {
     // Everything below here is only needed if the sheet is editable
     if (!this.isEditable) return;
 
+    html.on('click', '.resources-radio', this._onResourceChange.bind(this));
+
     // Roll handlers, click handlers, etc. would go here.
 
     // Active Effect management
@@ -74,4 +76,27 @@ export class ExaltedSecondItemSheet extends ItemSheet {
       onManageActiveEffect(ev, this.item)
     );
   }
+
+  _onResourceChange(event) {
+    event.preventDefault()
+    const element = event.currentTarget
+    if ($(element).prop('readonly')) {
+      return;
+    }
+    const parent = $(element.parentNode);
+    const fieldStrings = $(parent).attr('name');
+    var val = $(element).data('index') + 1;
+    // const oldVal = foundry.utils.getProperty(this.item, fieldStrings);
+    // const min = foundry.utils.getProperty(this.item, fieldStrings.replace("value", "min"));
+    // console.log(val);
+    // console.log(oldVal);
+    // console.log(min);
+    // if (val == 1 && oldVal == 1 && min == 0) {
+    //   val = 0;
+    // }
+    // console.log(val);
+    this.item.update({[fieldStrings]: val});
+    // console.log(this.item);
+  }
 }
+

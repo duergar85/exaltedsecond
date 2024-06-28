@@ -364,3 +364,128 @@
 .exaltedsecond .effects .item .effect-controls {
   border: none;
 }
+
+.exaltedsecond .attributes,
+.exaltedsecond .abilities {
+  grid-auto-flow: column;
+}
+
+.grid-3row {
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+}
+
+.grid-5row {
+  grid-template-rows: repeat(5, minmax(0, 1fr));
+}
+
+.center {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.attributes-type,
+.attributes-type h4 {
+  margin: 0; 
+  text-decoration: underline;
+}
+
+.abilities-caste,
+.abilities-caste h4 {
+  margin: 0; 
+  text-decoration: underline;
+}
+
+input[type="checkbox"].check15 {
+  flex: 0 0 15px;
+  width: 15px;
+  height: 15px;
+}
+
+.ability.excellencies {
+  margin-top: .25rem;
+  margin-bottom: .25rem;
+}
+
+.excellencies {
+  font-size: 12px;
+  justify-content: space-evenly;
+}
+
+.excellencies label {
+  flex: 0;
+  text-align: start;
+  font-weight: normal !important;
+}
+
+.excellenciesTable {
+  border: 0;
+  border-color: transparent;
+  margin: 0;
+  font-size: 5px;
+  min-width: 90px;
+  width: 90px;
+  max-width: 90px;
+}
+
+.excellenciesTable tbody {
+  border: 0;
+  border-color: transparent;
+}
+
+.excellenciesTable tbody tr {
+  border: 0;
+  border-color: transparent;
+}
+
+.excellenciesTable tbody tr td {
+  border: solid 1px var(--color-border-light-tertiary);
+  font-weight: bold;
+  padding: 0;
+  min-width: 18px;
+  width: 18px;
+  max-width: 18px;
+}
+
+.excellenciesTable tbody tr td input[type="checkbox"] {
+  margin: 0;
+}
+
+.greyed {
+  background-color: var(--color-checkbox-checked);
+}
+
+.abilities > div {
+  border: solid 1px var(--color-checkbox-checked);
+  border-radius: 5px;
+}
+
+.resources {
+  display: grid;
+  margin-right: 0.4rem;
+}
+
+.resources > input {
+  margin: 0;
+  padding: 0;
+}
+
+.resources-radio[readonly] {
+  opacity: .7;
+}
+
+.resources3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  min-width: 47px;
+}
+
+.resources5 {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  min-width: 73px;
+}
+
+.resources10 {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  min-width: 73px;
+}

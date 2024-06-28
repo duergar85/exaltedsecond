@@ -1,6 +1,65 @@
 {
   "EXALTED_SECOND": {
-    "Ability": {
+
+    "BIOGRAPHY": {
+      "Hair": { "long": "Hair", "abbr": "hair" },
+      "Eyes": { "long": "Eyes", "abbr": "eyes" },
+      "Height": { "long": "Height", "abbr": "height" },
+      "Weight": { "long": "Weight", "abbr": "weight" },
+      "Body": { "long": "Body", "abbr": "body" },
+      "Gender": { "long": "Gender", "abbr": "gender" },
+      "DistinguishingMarks": { "long": "Distinguishing Marks", "abbr": "marks" },
+      "Biography": { "long": "Biography", "abbr": "bio" },
+      "Character": { "long": "Character", "abbr": "character" }
+    },
+
+    "ATTRIBUTES": { 
+      "Strength": { "long": "Strength", "abbr": "str" },
+      "Dexterity": { "long": "Dexterity", "abbr": "dex" },
+      "Stamina": { "long": "Stamina", "abbr": "sta" },
+      "Charisma": { "long": "Charisma", "abbr": "cha" },
+      "Manipulation": { "long": "Manipulation", "abbr": "man" },
+      "Appearance": { "long": "Appearance", "abbr": "app" },
+      "Perception": { "long": "Perception", "abbr": "per" },
+      "Intelligence": { "long": "Intelligence", "abbr": "int" },
+      "Wits": { "long": "Wits", "abbr": "wts" }
+    },
+
+    "ABILITIES": {
+      "Archery": { "long": "Archery", "abbr": "arc" },
+      "MartialArts": { "long": "Martial Arts", "abbr": "mar" },
+      "Melee": { "long": "Melee", "abbr": "mel" },
+      "Thrown": { "long": "Thrown", "abbr": "thr" },
+      "War": { "long": "War", "abbr": "war" },
+      "Integrity": { "long": "Integrity", "abbr": "int" },
+      "Performance": { "long": "Performance", "abbr": "per" },
+      "Presence": { "long": "Presence", "abbr": "pre" },
+      "Resistance": { "long": "Resistance", "abbr": "res" },
+      "Survival": { "long": "Survival", "abbr": "sur" },
+      "Craft": { "long": "Craft", "abbr": "cra" },
+      "Investigation": { "long": "Investigation", "abbr": "inv" },
+      "Lore": { "long": "Lore", "abbr": "lor" },
+      "Medicine": { "long": "Medicine", "abbr": "med" },
+      "Occult": { "long": "Occult", "abbr": "occ" },
+      "Athletics": { "long": "Athletics", "abbr": "ath" },
+      "Awareness": { "long": "Awareness", "abbr": "awe" },
+      "Dodge": { "long": "Dodge", "abbr": "dod" },
+      "Larceny": { "long": "Larceny", "abbr": "lar" },
+      "Stealth": { "long": "Stealth", "abbr": "ste" },
+      "Bureaucracy": { "long": "Bureaucracy", "abbr": "bur" },
+      "Linguistics": { "long": "Linguistics", "abbr": "lin" },
+      "Ride": { "long": "Ride", "abbr": "rid" },
+      "Sail": { "long": "Sail", "abbr": "sai" },
+      "Socialise": { "long": "Socialise", "abbr": "soc" }
+    },
+
+    "SPECIALTIES": {
+      "First": { "long": "First Specialty", "abbr": "first" },
+      "Second": { "long": "Second Specialty", "abbr": "second" },
+      "Third": { "long": "Third Specialty", "abbr": "third" }
+    },
+
+    "AbilityNO": {
       "Str": { "long": "Strength", "abbr": "str" },
       "Con": { "long": "Constitution", "abbr": "con" },
       "Dex": { "long": "Dexterity", "abbr": "dex" },

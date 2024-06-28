@@ -31,8 +31,8 @@ Hooks.once('init', function () {
    * @type {String}
    */
   CONFIG.Combat.initiative = {
-    formula: '1d20 + @abilities.dex.mod',
-    decimals: 2,
+    formula: '(@attributes.wits.value + @attributes.awareness.value)d10cs>=7',
+    decimals: 0,
   };
 
   // Define custom Document and DataModel classes
@@ -43,13 +43,15 @@ Hooks.once('init', function () {
   // with the Character/NPC as part of super.defineSchema()
   CONFIG.Actor.dataModels = {
     character: models.ExaltedSecondCharacter,
-    npc: models.ExaltedSecondNPC
+    npc: models.ExaltedSecondNPC,
+    solar: models.ExaltedSecondSolar
   }
   CONFIG.Item.documentClass = ExaltedSecondItem;
   CONFIG.Item.dataModels = {
     item: models.ExaltedSecondItem,
     feature: models.ExaltedSecondFeature,
-    spell: models.ExaltedSecondSpell
+    spell: models.ExaltedSecondSpell,
+    specialty: models.ExaltedSecondSpecialty
   }
 
   // Active Effects are never copied to the Actor,
@@ -80,6 +82,48 @@ Hooks.once('init', function () {
 // If you need to add Handlebars helpers, here is a useful example:
 Handlebars.registerHelper('toLowerCase', function (str) {
   return str.toLowerCase();
+});
+
+Handlebars.registerHelper('readonly', function(param) {
+  if(param) {
+    return "readonly";
+  }
+  return "";
+});
+
+Handlebars.registerHelper('selected', function(param) {
+  if(param) {
+    return "selected";
+  }
+  return "";
+});
+
+Handlebars.registerHelper('numLoop', function (num, options) {
+  let ret = ''
+
+  for (let i = 0, j = num; i < j; i++) {
+    ret = ret + options?.fn(i)
+  }
+
+  return ret
+});
+
+Handlebars.registerHelper('ifAnd', function (param1, param2, options) {
+  if (param1 && param2) {
+    return options.fn(this);;
+  }
+  else {
+    return options.inverse(this);;
+  }
+});
+
+Handlebars.registerHelper('ifOr', function (param1, param2, options) {
+  if (param1 || param2) {
+    return options.fn(this);;
+  }
+  else {
+    return options.inverse(this);;
+  }
 });
 
 /* -------------------------------------------- */

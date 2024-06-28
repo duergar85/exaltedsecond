@@ -4,12 +4,8 @@
   "description": "The Exalted Second Edition system for FoundryVTT!",
   "authors": [
     {
-      "name": "Asacolips",
-      "discord": "asacolips"
-    },
-    {
-      "name": "Lee Talman",
-      "discord": ".pizzaWizard"
+      "name": "duergar85",
+      "discord": "duergar85"
     }
   ],
   "url": "Replace this with a link to your public repository",
@@ -24,7 +20,7 @@
       "thumbnail": "systems/exaltedsecond/assets/anvil-impact.png"
     }
   ],
-  "version": "2.0.0",
+  "version": "1.0.0",
   "compatibility": {
     "minimum": 11,
     "verified": "11.315"

@@ -1,0 +1,63 @@
+<form class="{{cssClass}}" autocomplete="off">
+  <header class="sheet-header">
+    <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}"/>
+    <div class="header-fields flexcol">
+      <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Name"/></h1>
+      <div>&nbsp;</div>
+      <div class="flexrow flex" style="align-items: center;">
+        {{!-- <label class="resource-label">Ability</label> --}}
+        <label class="resource-label">Ability</label>
+        <input type="text" name="system.ability" value="{{system.ability}}" disabled />
+        {{!-- <select name="system.ability" disabled>
+          <option value="Archery" {{selected (eq system.ability 'Archery')}}>Archery</option>
+          <option value="MartialArts" {{selected (eq system.ability 'MartialArts')}}>Martial Arts</option>
+          <option value="Melee" {{selected (eq system.ability 'Melee')}}>Melee</option>
+          <option value="Thrown" {{selected (eq system.ability 'Thrown')}}>Thrown</option>
+          <option value="War" {{selected (eq system.ability 'War')}}>War</option>
+          <option value="Integrity" {{selected (eq system.ability 'Integrity')}}>Integrity</option>
+          <option value="Performance" {{selected (eq system.ability 'Performance')}}>Performance</option>
+          <option value="Presence" {{selected (eq system.ability 'Presence')}}>Presence</option>
+          <option value="Resistance" {{selected (eq system.ability 'Resistance')}}>Resistance</option>
+          <option value="Survival" {{selected (eq system.ability 'Survival')}}>Survival</option>
+          <option value="Craft" {{selected (eq system.ability 'Craft')}}>Craft</option>
+          <option value="Investigation" {{selected (eq system.ability 'Investigation')}}>Investigation</option>
+          <option value="Lore" {{selected (eq system.ability 'Lore')}}>Lore</option>
+          <option value="Medicine" {{selected (eq system.ability 'Medicine')}}>Medicine</option>
+          <option value="Occult" {{selected (eq system.ability 'Occult')}}>Occult</option>
+          <option value="Athletics" {{selected (eq system.ability 'Athletics')}}>Athletics</option>
+          <option value="Awareness" {{selected (eq system.ability 'Awareness')}}>Awareness</option>
+          <option value="Dodge" {{selected (eq system.ability 'Dodge')}}>Dodge</option>
+          <option value="Larceny" {{selected (eq system.ability 'Larceny')}}>Larceny</option>
+          <option value="Stealth" {{selected (eq system.ability 'Stealth')}}>Stealth</option>
+          <option value="Bureaucracy" {{selected (eq system.ability 'Bureaucracy')}}>Bureaucracy</option>
+          <option value="Linguistics" {{selected (eq system.ability 'Linguistics')}}>Linguistics</option>
+          <option value="Ride" {{selected (eq system.ability 'Ride')}}>Ride</option>
+          <option value="Sail" {{selected (eq system.ability 'Sail')}}>Sail</option>
+          <option value="Socialise" {{selected (eq system.ability 'Socialise')}}>Socialise</option>
+        </select> --}}
+        <div>&nbsp;</div>
+        <label class="resource-label">Value</label>
+        <div class="resources resources3" name="system.value">
+        {{#numLoop 3}}
+          <input class="resources-radio" type="radio" data-index="{{this}}" {{checked (gt ../system.value this)}} />
+        {{/numLoop}}
+        </div>
+      </div>
+    </div>
+  </header>
+
+  {{!-- Sheet Tab Navigation --}}
+  <nav class="sheet-tabs tabs" data-group="primary">
+    <a class="item" data-tab="description">Description</a>
+  </nav>
+
+  {{!-- Sheet Body --}}
+  <section class="sheet-body">
+
+    {{!-- Description Tab --}}
+    <div class="tab" data-group="primary" data-tab="description">
+    {{editor system.description target="system.description" rollData=rollData button=true owner=owner editable=editable}}  
+    </div>
+
+  </section>
+</form>

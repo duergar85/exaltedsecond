@@ -12,7 +12,7 @@ export class ExaltedSecondActorSheet extends ActorSheet {
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ['exaltedsecond', 'sheet', 'actor'],
-      width: 600,
+      width: 640,
       height: 600,
       tabs: [
         {
@@ -46,15 +46,24 @@ export class ExaltedSecondActorSheet extends ActorSheet {
     context.system = actorData.system;
     context.flags = actorData.flags;
 
-    // Prepare character data and items.
-    if (actorData.type == 'character') {
-      this._prepareItems(context);
-      this._prepareCharacterData(context);
-    }
+    // // Prepare character data and items.
+    // if (actorData.type == 'character') {
+    //   this._prepareItems(context);
+    //   this._prepareCharacterData(context);
+    // }
 
-    // Prepare NPC data and items.
-    if (actorData.type == 'npc') {
-      this._prepareItems(context);
+    // // Prepare NPC data and items.
+    // if (actorData.type == 'npc') {
+    //   this._prepareItems(context);
+    // }
+
+    // Prepare generic data and items
+    this._prepareItems(context);
+    this._prepareData(context);
+
+    // Prepare Solar data and items.
+    if (actorData.type == 'solar') {
+      // Nothing for now
     }
 
     // Add roll data for TinyMCE editors.
@@ -84,6 +93,25 @@ export class ExaltedSecondActorSheet extends ActorSheet {
     // }
   }
 
+/**
+   * Organize and classify Items for Solar sheets.
+   *
+   * @param {Object} actorData The actor to prepare.
+   *
+   * @return {undefined}
+   */
+_prepareData(context) {
+  for (let [k, v] of Object.entries(context.system.biography)) {
+    v.label = game.i18n.localize(CONFIG.EXALTED_SECOND.biography[k]) ?? k;
+  }
+  for (let [k, v] of Object.entries(context.system.attributes)) {
+    v.label = game.i18n.localize(CONFIG.EXALTED_SECOND.attributes[k]) ?? k;
+  }
+  for (let [k, v] of Object.entries(context.system.abilities)) {
+    v.label = game.i18n.localize(CONFIG.EXALTED_SECOND.abilities[k]) ?? k;
+  }
+}
+
   /**
    * Organize and classify Items for Character sheets.
    *
@@ -91,7 +119,7 @@ export class ExaltedSecondActorSheet extends ActorSheet {
    *
    * @return {undefined}
    */
-  _prepareItems(context) {
+  _prepareOldItems(context) {
     // Initialize containers.
     const gear = [];
     const features = [];
@@ -133,6 +161,76 @@ export class ExaltedSecondActorSheet extends ActorSheet {
     context.spells = spells;
   }
 
+  _prepareItems(context) {
+    // const spells = {
+    //   0: [],
+    //   1: [],
+    //   2: [],
+    //   3: [],
+    //   4: [],
+    //   5: [],
+    //   6: [],
+    //   7: [],
+    //   8: [],
+    //   9: [],
+    // };
+
+    const specialties = {
+      // '': [],
+      'Archery': [],
+      'MartialArts': [],
+      'Melee': [],
+      'Thrown': [],
+      'War': [],
+      'Integrity': [], 
+      'Performance': [],
+      'Presence': [],
+      'Resistance': [],
+      'Survival': [],
+      'Craft': [],
+      'Investigation': [],
+      'Lore': [],
+      'Medicine': [],
+      'Occult': [],
+      'Athletics': [],
+      'Awareness': [],
+      'Dodge': [],
+      'Larceny': [],
+      'Stealth': [],
+      'Bureaucracy': [],
+      'Linguistics': [],
+      'Ride': [],
+      'Sail': [],
+      'Socialise': []
+    };
+     console.log(context.items);
+    for (let i of context.items) {
+      i.img = i.img || Item.DEFAULT_ICON;
+      if (i.type === 'specialty') {
+        // console.log(i.system);
+        if (i.system.ability != undefined) {
+          // console.log(specialties);
+          if (specialties[i.system.ability]) {
+            specialties[i.system.ability].push(i);
+          }
+          else {
+            specialties[''].push(i);
+          }
+        }
+      } 
+      // else if (i.type === 'spell') {
+      //   if (i.system.spellLevel != undefined) {
+      //     spells[i.system.spellLevel].push(i);
+      //   }
+      // }
+    }
+    
+    // context.spells = spells;
+    context.specialties = specialties;
+
+    console.log(specialties);
+  }
+
   /* -------------------------------------------- */
 
   /** @override */
@@ -145,6 +243,8 @@ export class ExaltedSecondActorSheet extends ActorSheet {
       const item = this.actor.items.get(li.data('itemId'));
       item.sheet.render(true);
     });
+
+    html.on('click', '.resources-radio', this._onResourceChange.bind(this));
 
     // -------------------------------------------------------------
     // Everything below here is only needed if the sheet is editable
@@ -183,6 +283,35 @@ export class ExaltedSecondActorSheet extends ActorSheet {
         li.addEventListener('dragstart', handler, false);
       });
     }
+
+    html.on('click', '.mylock', (ev) => {
+      let item =$(ev.currentTarget); 
+      let val = $(item).data('val');
+      switch (val) {
+        case 'Attributes':
+          this.actor.update({'system.settings.lockAttributes': !this.actor.system.settings.lockAttributes});
+        break;
+
+        case 'Abilities':
+          this.actor.update({'system.settings.lockAbilities': !this.actor.system.settings.lockAbilities});
+        break;
+
+        case 'Specialties':
+          this.actor.update({'system.settings.lockSpecialties': !this.actor.system.settings.lockSpecialties});
+        break;
+
+        default:
+          return;
+      }
+      if ($(item).hasClass('fa-lock')) {
+        $(item).addClass('fa-lock-open');
+        $(item).removeClass('fa-lock');
+      }
+      else {
+        $(item).addClass('fa-lock');
+        $(item).removeClass('fa-lock-open');
+      }
+    });
   }
 
   /**
@@ -200,6 +329,9 @@ export class ExaltedSecondActorSheet extends ActorSheet {
     // Initialize a default name.
     const name = `New ${type.capitalize()}`;
     // Prepare the item object.
+    if (type == 'specialty') {
+      data.ability = $(header).data('specialty-ability');
+    }
     const itemData = {
       name: name,
       type: type,
@@ -243,4 +375,43 @@ export class ExaltedSecondActorSheet extends ActorSheet {
       return roll;
     }
   }
+
+  _onResourceChange(event) {
+    event.preventDefault()
+    const element = event.currentTarget
+    if ($(element).prop('readonly')) {
+      return;
+    }
+    const parent = $(element.parentNode);
+    const fieldStrings = $(parent).attr('name');
+    var val = $(element).data('index') + 1;
+    const oldVal = foundry.utils.getProperty(this.actor, fieldStrings);
+    const min = foundry.utils.getProperty(this.actor, fieldStrings.replace("value", "min"));
+    if (val == 1 && oldVal == 1 && min == 0) {
+      val = 0;
+    }
+    this.actor.update({[fieldStrings]: val});
+  }
+
+  // _assignToActorField(fields, value) {
+  //   const actorData = foundry.utils.duplicate(this.actor)
+  //   // update actor owned items
+  //   if (fields.length === 2 && fields[0] === 'items') {
+  //     for (const i of actorData.items) {
+  //       if (fields[1] === i._id) {
+  //         i.data.points = value
+  //         break
+  //       }
+  //     }
+  //   } else {
+  //     const lastField = fields.pop()
+  //     if (fields.reduce((data, field) => data[field], actorData)[lastField] === 1 && value === 1) {
+  //       fields.reduce((data, field) => data[field], actorData)[lastField] = 0;
+  //     }
+  //     else {
+  //       fields.reduce((data, field) => data[field], actorData)[lastField] = value
+  //     }
+  //   }
+  //   this.actor.update(actorData)
+  // }
 }

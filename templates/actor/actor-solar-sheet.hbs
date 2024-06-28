@@ -1,0 +1,279 @@
+<form class="{{cssClass}} {{actor.type}} flexcol" autocomplete="off">
+
+  {{!-- Sheet Header --}}
+  <header class="sheet-header">
+    <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100"/>
+    <div class="header-fields">
+      <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></h1>
+      {{!-- The grid classes are defined in scss/global/_grid.scss. To use,
+      use both the "grid" and "grid-Ncol" class where "N" can be any number
+      from 1 to 12 and will create that number of columns.  --}}
+      {{!-- <div class="resources grid grid-3col">
+
+        {{!-- "flex-group-center" is also defined in the _grid.scss file
+        and it will add a small amount of padding, a border, and will
+        center all of its child elements content and text. -}}
+        <div class="resource flex-group-center">
+          <label for="system.health.value" class="resource-label">Health</label>
+          <div class="resource-content flexrow flex-center flex-between">
+          <input type="text" name="system.health.value" value="{{system.health.value}}" data-dtype="Number"/>
+          <span> / </span>
+          <input type="text" name="system.health.max" value="{{system.health.max}}" data-dtype="Number"/>
+          </div>
+        </div>
+
+        <div class="resource flex-group-center">
+          <label for="system.power.value" class="resource-label">Power</label>
+          <div class="resource-content flexrow flex-center flex-between">
+          <input type="text" name="system.power.value" value="{{system.power.value}}" data-dtype="Number"/>
+          <span> / </span>
+          <input type="text" name="system.power.max" value="{{system.power.max}}" data-dtype="Number"/>
+          </div>
+        </div>
+
+        <div class="resource flex-group-center">
+          <label for="system.attributes.level.value" class="resource-label">Level</label>
+          <div class="resource-content flexrow flex-center flex-between">
+          <input type="text" name="system.attributes.level.value" value="{{system.attributes.level.value}}" data-dtype="Number"/>
+          </div>
+        </div>
+
+      </div> --}}
+    </div>
+  </header>
+
+  {{!-- Sheet Tab Navigation --}}
+  <nav class="sheet-tabs tabs" data-group="primary">
+    {{!-- Default tab is specified in actor-sheet.mjs --}}
+    <a class="item" data-tab="stats">Stats</a>
+    <a class="item" data-tab="description">Description</a>
+    {{!-- <a class="item" data-tab="items">Items</a> --}}
+    <a class="item" data-tab="spells">Spells</a>
+    {{!-- <a class="item" data-tab="effects">Effects</a> --}}
+  </nav>
+
+  {{!-- Sheet Body --}}
+  <section class="sheet-body">
+
+    {{!-- Owned Stats Tab --}}
+    <div class="tab stats" data-group="primary" data-tab="stats">
+
+      {{!-- ATTRIBUTES --}}
+      <div class="flexrow center">
+        <h3>
+          Attributes&nbsp;&nbsp;
+          {{#if (eq system.settings.lockAttributes true)}}
+          <i class="fas fa-lock mylock" data-val="Attributes"></i>
+          {{else}}
+          <i class="fas fa-lock-open mylock" data-val="Attributes"></i>
+          {{/if}}
+        </h3>
+      </div>
+      <div class="attributes-type grid grid-3col grid-1row">
+        <div class="flexrow center"><h4>Physical</h4></div>
+        <div class="flexrow center"><h4>Social</h4></div>
+        <div class="flexrow center"><h4>Mental</h4></div>
+      </div>
+      <div class="attributes grid grid-3col grid-3row">
+        {{#each system.attributes as |attribute key|}}
+        <div class="attribute flexrow flex-group-center">
+          <label for="system.attributes.{{key}}.value" class="resource-label rollable flexlarge align-left" data-roll="(@attributes.{{key}}.value)d10cs>=7" data-label="{{attribute.label}}">{{attribute.label}}</label>
+          {{!-- <span class="attributes-mod rollable" data-roll="d20+@attributes.{{key}}.value" data-label="{{attribute.label}}">{{numberFormat attribute.mod decimals=0 sign=true}}</span> --}}
+          <div class="resources resources{{attribute.max}}" name="system.attributes.{{key}}.value">
+          {{#numLoop attribute.max}}
+            <input class="resources-radio" type="radio" data-index="{{this}}" {{checked (gt attribute.value this)}} {{readonly ../../system.settings.lockAttributes}} />
+          {{/numLoop}}
+          </div>
+        </div>
+        {{/each}}
+      </div>
+
+      {{!-- ABILITIES --}}
+      <div class="flexrow center">
+        <h3>
+          Abilities&nbsp;&nbsp;
+          {{#if (eq system.settings.lockAbilities true)}}
+          <i class="fas fa-lock mylock" data-val="Abilities"></i>
+          {{else}}
+          <i class="fas fa-lock-open mylock" data-val="Abilities"></i>
+          {{/if}}
+        </h3>
+      </div>
+      <div class="abilities-caste grid grid-3col grid-1row">
+        <div class="flexrow center"><h4>Dawn</h4></div>
+        <div class="flexrow center"><h4>Zenith</h4></div>
+        <div class="flexrow center"><h4>Twilight</h4></div>
+      </div>
+      <div class="abilities grid grid-3col grid-5row">
+        {{#each system.abilities as |ability key|}}
+        {{#if (eq ability.row 0)}}
+        <div class="flexcol">
+          <div class="ability flexrow flex-group-center">
+            <input type="checkbox" name="system.abilities.{{key}}.fav" {{checked ability.fav}} {{disabled ../system.settings.lockAbilities}} />
+            <label for="system.abilities.{{key}}.value" class="resource-label rollable flexlarge align-left" data-roll="(@abilities.{{key}}.value)d10cs>=7" data-label="{{ability.label}}">{{ability.label}}</label>
+            {{!-- <span class="ability-mod rollable" data-roll="d20+@abilities.{{key}}.mod" data-label="{{ability.label}}">{{numberFormat ability.mod decimals=0 sign=true}}</span> --}}
+            <div class="resources resources{{ability.max}}" name="system.abilities.{{key}}.value">
+            {{#numLoop ability.max}}
+              <input class="resources-radio" type="radio" data-index="{{this}}" {{checked (gt ability.value this)}} {{readonly ../../system.settings.lockAbilities}} />
+            {{/numLoop}}
+            </div>
+          </div>
+          <div class="ability excellencies flexrow flex-group-center">
+            <div class="excellencies flexrow">
+              <label class="resource-label">Excellencies</label>
+              <table class="excellenciesTable">
+                <tr>
+                  <td><input type="checkbox" class="check15" name="system.abilities.{{key}}.solar1stExcellency" {{checked ability.solar1stExcellency}} {{disabled ../system.settings.lockAbilities}} /></td>
+                  <td><input type="checkbox" class="check15" name="system.abilities.{{key}}.solar2ndExcellency" {{checked ability.solar2ndExcellency}} {{disabled ../system.settings.lockAbilities}} /></td>
+                  <td><input type="checkbox" class="check15" name="system.abilities.{{key}}.solar3rdExcellency" {{checked ability.solar3rdExcellency}} {{disabled ../system.settings.lockAbilities}} /></td>
+                  <td><input type="checkbox" class="check15" name="system.abilities.{{key}}.solarInfiniteMastery" {{checked ability.solarInfiniteMastery}} {{disabled ../system.settings.lockAbilities}} /></td>
+                  <td><input type="checkbox" class="check15" name="system.abilities.{{key}}.solarEssenceFlow" {{checked ability.solarEssenceFlow}} {{disabled ../system.settings.lockAbilities}} /></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+        {{/if}}
+        {{/each}}
+      </div>
+      <div class="abilities-caste grid grid-3col grid-1row">
+        <div class="flexrow center"><h4>Night</h4></div>
+        <div class="flexrow center"><h4>Eclipse</h4></div>
+        <div class="flexrow center">&nbsp;</div>
+      </div>
+      <div class="abilities grid grid-3col grid-5row">
+        {{#each system.abilities as |ability key|}}
+        {{#if (eq ability.row 1)}}
+        <div class="flexcol">
+          <div class="ability flexrow flex-group-center">
+            <input type="checkbox" name="system.abilities.{{key}}.fav" {{checked ability.fav}} {{disabled ../system.settings.lockAbilities}} />
+            <label for="system.abilities.{{key}}.value" class="resource-label rollable flexlarge align-left" data-roll="(@abilities.{{key}}.value)d10cs>=7" data-label="{{ability.label}}">{{ability.label}}</label>
+            {{!-- <span class="ability-mod rollable" data-roll="d20+@abilities.{{key}}.mod" data-label="{{ability.label}}">{{numberFormat ability.mod decimals=0 sign=true}}</span> --}}
+            <div class="resources resources{{ability.max}}" name="system.abilities.{{key}}.value">
+            {{#numLoop ability.max}}
+              <input class="resources-radio" type="radio" data-index="{{this}}" {{checked (gt ability.value this)}} {{disabled ../../system.settings.lockAbilities}} />
+            {{/numLoop}}
+            </div>
+          </div>
+          <div class="ability excellencies flexrow flex-group-center">
+            <div class="excellencies flexrow">
+              <label class="resource-label">Excellencies</label>
+              <table class="excellenciesTable">
+                <tr>
+                  <td><input type="checkbox" class="check15" name="system.abilities.{{key}}.solar1stExcellency" {{checked ability.solar1stExcellency}} {{disabled ../system.settings.lockAbilities}} /></td>
+                  <td><input type="checkbox" class="check15" name="system.abilities.{{key}}.solar2ndExcellency" {{checked ability.solar2ndExcellency}} {{disabled ../system.settings.lockAbilities}} /></td>
+                  <td><input type="checkbox" class="check15" name="system.abilities.{{key}}.solar3rdExcellency" {{checked ability.solar3rdExcellency}} {{disabled ../system.settings.lockAbilities}} /></td>
+                  <td><input type="checkbox" class="check15" name="system.abilities.{{key}}.solarInfiniteMastery" {{checked ability.solarInfiniteMastery}} {{disabled ../system.settings.lockAbilities}} /></td>
+                  <td><input type="checkbox" class="check15" name="system.abilities.{{key}}.solarEssenceFlow" {{checked ability.solarEssenceFlow}} {{disabled ../system.settings.lockAbilities}} /></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+        {{/if}}
+        {{/each}}
+      </div>
+
+      {{!-- SPECIALTIES --}}
+      <div class="flexrow center">
+        <h3>
+          Specialties&nbsp;&nbsp;
+          {{#if (eq system.settings.lockSpecialties true)}}
+          <i class="fas fa-lock mylock" data-val="Specialties"></i>
+          {{else}}
+          <i class="fas fa-lock-open mylock" data-val="Specialties"></i>
+          {{/if}}
+        </h3>
+      </div>
+      <ol class="items-list">
+        {{#each specialties as |specialties ability|}}
+          {{#ifOr (eq ../system.settings.lockSpecialties false) (ne specialties.length 0)}}
+            <li class="item flexrow items-header">
+              <div class="item-name">{{ability}}</div>
+              <div class="item-name">Name</div> {{!-- {{localiza STRINGA}} --}}
+              <div class="item-name">Value</div>
+              <div class="item-controls">
+                {{#if (eq ../system.settings.lockSpecialties false)}}
+                <a class="item-control item-create" title="Create Specialty" data-type="specialty" data-specialty-ability="{{ability}}">
+                  <i class="fas fa-plus"></i>
+                  {{!-- {{localize 'DOCUMENT.New' type='specialty'}} --}}
+                  Specialty
+                </a>
+                {{else}}
+                &nbsp;
+                {{/if}}
+              </div>
+            </li>
+            {{#each specialties as |item id|}}
+              <li class="item flexrow" data-item-id="{{item._id}}">
+                <div class="item-name">
+                  <div class="item-image">
+                    <a class="rollable" data-roll-type="item">
+                      <img src="{{item.img}}" title="{{item.name}}" width="24" height="24" />
+                    </a>
+                  </div>
+                  <h4>{{item.ability}}</h4>
+                </div>
+                <div class="item-name">
+                  <h4>{{item.name}}</h4>
+                </div>
+                <div class="item-name">
+                  <div class="resources resources3" name="item.system.value"> 
+                  {{#numLoop 3}}
+                    <input class="resources-radio" type="radio" data-index="{{this}}" {{checked (gt item.system.value this)}} readonly />
+                  {{/numLoop}}
+                  </div>
+                </div>
+                <div class="item-controls">
+                {{#if (eq ../../system.settings.lockSpecialties false)}}
+                  <a class="item-control item-edit" title="Edit Specialty">
+                    <i class="fas fa-edit"></i>
+                  </a>
+                  {{!-- {{localize 'DOCUMENT.Edit' type='specialty'}} --}}
+                  <a class="item-control item-delete" title="Delete Specialty">
+                    <i class="fas fa-trash"></i>
+                  </a>
+                  {{!-- {{localize 'DOCUMENT.Delete' type='specialty'}} --}}
+                {{else}}
+                  &nbsp;
+                {{/if}}
+                </div>
+              </li>
+            {{/each}}
+          {{/ifOr}}
+        {{/each}}
+      </ol>
+
+        {{!-- For the main features list, span the right two columns
+        <section class="main grid-span-2">
+          {{!- This is a Handlebars partial. They're stored in the `/parts` folder next to this sheet, and defined in module/helpers/templates.mjs -}}
+          {{> "systems/exaltedsecond/templates/actor/parts/actor-features.hbs"}}
+        </section> --}}
+    </div>
+
+    {{!-- Biography Tab --}}
+    {{!-- <div class="tab description" data-group="primary" data-tab="description">
+      {{!- If you want TinyMCE editors to output inline rolls when rendered, you need to pass the actor's roll data to the rollData property. -}}
+      {{editor system.biography target="system.biography" rollData=rollData button=true owner=owner editable=editable}}
+    </div> --}}
+
+    {{!-- Owned Items Tab --}}
+    {{!-- <div class="tab items" data-group="primary" data-tab="items">
+       {{> "systems/exaltedsecond/templates/actor/parts/actor-items.hbs"}}
+    </div> --}}
+
+    {{!-- Owned Spells Tab --}}
+    <div class="tab spells" data-group="primary" data-tab="spells">
+      {{> "systems/exaltedsecond/templates/actor/parts/actor-spells.hbs"}}
+    </div>
+
+    {{!-- Active Effects Tab --}}
+    {{!-- <div class="tab effects flexcol" data-group="primary" data-tab="effects">
+      {{> "systems/exaltedsecond/templates/actor/parts/actor-effects.hbs"}}
+    </div> --}}
+
+  </section>
+</form>
+
+{{log system}}
+
